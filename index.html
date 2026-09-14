@@ -1,0 +1,947 @@
+<!doctype html>
+<html lang="mn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Кибер аюулгүй байдлын нэр томьёо — багшийн лавлах</title>
+<meta name="theme-color" content="#12212F">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" href="icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Нэр томьёо">
+<link rel="manifest" href="manifest.json">
+<style>
+:root{
+  --paper:#F4F6F8; --ink:#12212F; --amber:#A8641B; --slate:#62748A;
+  --rule:#DCE3EA; --card:#FFFFFF;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:"URW Geometric","URW Geometric Regular",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  font-size:16px; line-height:1.45;
+  padding-bottom:3rem;
+}
+header{
+  background:var(--ink); color:#fff;
+  padding:1.1rem 1rem .9rem; padding-top:calc(1.1rem + env(safe-area-inset-top));
+}
+header h1{font-size:1.18rem; margin:0 0 .15rem; font-weight:700; letter-spacing:-.01em}
+header p{margin:0; font-size:.8rem; color:#9DB2C6}
+.searchwrap{
+  position:sticky; top:0; z-index:20; background:var(--paper);
+  padding:.6rem 1rem .45rem; border-bottom:1px solid var(--rule);
+}
+.field{display:flex; align-items:center; gap:.5rem;
+  background:var(--card); border:1px solid var(--rule); border-radius:10px; padding:.1rem .7rem}
+.field svg{flex:none; opacity:.55}
+#q{
+  flex:1; border:0; outline:0; background:transparent; color:var(--ink);
+  font:inherit; font-size:1rem; padding:.72rem 0; min-width:0;
+}
+#q::placeholder{color:#93A4B5}
+#q::-webkit-search-cancel-button,#q::-webkit-search-decoration{-webkit-appearance:none;appearance:none}
+#clear{
+  border:0; background:transparent; color:var(--slate); font:inherit;
+  font-size:1.35rem; line-height:1; padding:.35rem .2rem; cursor:pointer; display:none;
+}
+#count{font-size:.78rem; color:var(--slate); padding:.4rem .15rem 0}
+#count:empty{display:none}
+nav{
+  display:flex; gap:.4rem; overflow-x:auto; padding:.55rem 1rem .65rem;
+  -webkit-overflow-scrolling:touch; scrollbar-width:none;
+}
+nav::-webkit-scrollbar{display:none}
+nav a{
+  flex:none; text-decoration:none; color:var(--ink);
+  border:1px solid var(--rule); background:var(--card);
+  border-radius:999px; padding:.5rem .8rem; font-size:.84rem; white-space:nowrap;
+}
+nav a:active{background:var(--ink); color:#fff}
+main{padding:0 1rem}
+section{margin:0 0 1.6rem}
+section{scroll-margin-top:calc(var(--stick, 4.2rem) + 2.6rem)}
+section h2{
+  position:sticky; top:var(--stick, 4.2rem); z-index:10;
+  margin:0 -1rem .2rem; padding:.5rem 1rem;
+  background:var(--paper);
+  font-size:.82rem; font-weight:700; color:var(--amber);
+  border-bottom:1px solid var(--rule);
+  display:flex; justify-content:space-between; align-items:baseline;
+}
+section h2 .n{font-weight:400; color:var(--slate); font-size:.78rem}
+.e{padding:.72rem 0 .78rem; border-bottom:1px solid var(--rule)}
+section h2 a{color:inherit; text-decoration:none}
+.toc{display:none}
+.e h3{margin:0 0 .2rem; font-size:1rem; font-weight:400; line-height:1.3}
+.mn{font-weight:700}
+.en{color:var(--amber); font-style:italic; margin-left:.45rem; font-size:.94rem}
+.say{color:var(--amber); margin-left:.45rem; font-size:.94rem}
+.ab{margin:.1rem 0 .18rem; font-size:.82rem; color:var(--slate)}
+.t{margin:0; font-size:.93rem; color:#243447}
+.pair .mn,.q .mn{display:block; margin-bottom:.15rem}
+.q .t{color:var(--ink)}
+#empty{display:none; padding:2.4rem 0; color:var(--slate); font-size:.95rem}
+footer{padding:1.4rem 1rem 0; color:var(--slate); font-size:.8rem; border-top:1px solid var(--rule); margin-top:1rem}
+@media (min-width:720px){
+  body{font-size:17px}
+  main,.searchwrap,header,nav,footer{max-width:46rem; margin-left:auto; margin-right:auto}
+}
+@media (prefers-reduced-motion:no-preference){
+  nav a,.field{transition:background-color .12s ease,border-color .12s ease}
+}
+:focus-visible{outline:2px solid var(--amber); outline-offset:2px}
+@media print{
+  html{--stick:0}
+  .toc{display:block; break-after:page; padding-top:4pt}
+  .toch{font-size:11pt; color:var(--ink); margin:0 0 4pt; font-weight:700}
+  .toc ol{margin:0; padding-left:16pt}
+  .toc li{margin:0 0 5pt; font-size:11pt}
+  .toc a{color:var(--ink); text-decoration:none}
+  .tochint{margin-top:10pt; font-size:8.5pt; color:var(--slate)}
+  body{background:#fff; font-size:10.5pt; padding-bottom:0}
+  header{padding:8pt 0 6pt; background:#fff; color:var(--ink); border-bottom:1.6pt solid var(--ink)}
+  header h1{font-size:14pt}
+  header p{color:var(--slate)}
+  .searchwrap,nav,#empty,#count{display:none !important}
+  main{padding:0}
+  section{margin:0 0 10pt; break-inside:auto}
+  section h2{position:static; margin:10pt 0 2pt; padding:3pt 0; background:#fff; font-size:9.5pt; break-after:avoid}
+  .e{padding:4pt 0 5pt; break-inside:avoid}
+  .e h3{font-size:10.5pt}
+  .en,.say{font-size:10pt}
+  .ab{font-size:8.5pt}
+  .t{font-size:9.5pt}
+  footer{margin-top:10pt; padding:6pt 0 0; font-size:8.5pt}
+  a{color:inherit; text-decoration:none}
+}
+
+</style>
+</head>
+<body>
+<header>
+  <h1>Кибер аюулгүй байдлын нэр томьёо</h1>
+  <p>Багшийн түргэн лавлах · 156 нэр томьёо · CSL201</p>
+</header>
+
+<div class="searchwrap">
+  <label class="field" for="q">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.6-3.6"/></svg>
+    <input id="q" type="search" inputmode="search" autocomplete="off" placeholder="Монгол, англи, товчлолоор хайх">
+    <button id="clear" type="button" aria-label="Хайлтыг цэвэрлэх">×</button>
+  </label>
+  <div id="count"></div>
+</div>
+
+<nav><a href="#suuri">Суурь ойлголт</a><a href="#haldlaga">Халдлагын төрөл</a><a href="#haldagch">Халдагч ба туршилт</a><a href="#hamgaalalt">Хамгаалалтын хэрэгсэл ба байгууллага</a><a href="#erhzui">Эрх зүйн нэр томьёо</a><a href="#standart">Стандарт, зохицуулалт, лавлах</a><a href="#pairs">Андуурдаг хос</a><a href="#say">Дуудлага</a><a href="#qa">Хурдан хариулт</a></nav>
+
+<div class="toc" id="top">
+  <h2 class="toch">Агуулга</h2>
+  <ol><li><a href="#suuri">Суурь ойлголт</a></li><li><a href="#haldlaga">Халдлагын төрөл</a></li><li><a href="#haldagch">Халдагч ба туршилт</a></li><li><a href="#hamgaalalt">Хамгаалалтын хэрэгсэл ба байгууллага</a></li><li><a href="#erhzui">Эрх зүйн нэр томьёо</a></li><li><a href="#standart">Стандарт, зохицуулалт, лавлах</a></li><li><a href="#pairs">Андуурдаг хос</a></li><li><a href="#say">Дуудлага</a></li><li><a href="#qa">Хурдан хариулт</a></li></ol>
+  <p class="tochint">Хэсгийн нэр дээр дарж үсэрнэ. Хэсэг бүрийн гарчиг дээр дарвал энэ жагсаалт руу буцна.</p>
+</div>
+
+<main>
+<section id="suuri"><h2><a href="#top">Суурь ойлголт</a><span class="n">20</span></h2>
+<article class="e" data-k="кибер орон зай cyberspace  техник, өгөгдөл, хүн гурвын харилцан үйлчлэлээр үүсэх цахим орчин">
+<h3><span class="mn">Кибер орон зай</span><span class="en">cyberspace</span></h3>
+
+<p class="t">Техник, өгөгдөл, хүн гурвын харилцан үйлчлэлээр үүсэх цахим орчин</p>
+</article>
+<article class="e" data-k="мэдээллийн аюулгүй байдал information security  нууцлал, бүрэн бүтэн байдал, хүртээмжийг хангах бүх үйл ажиллагаа">
+<h3><span class="mn">Мэдээллийн аюулгүй байдал</span><span class="en">information security</span></h3>
+
+<p class="t">Нууцлал, бүрэн бүтэн байдал, хүртээмжийг хангах бүх үйл ажиллагаа</p>
+</article>
+<article class="e" data-k="кибер аюулгүй байдал cybersecurity  дээрхийн сүлжээ, цахим орчинд хамаарах хэсэг. практикт ойролцоо утгатай">
+<h3><span class="mn">Кибер аюулгүй байдал</span><span class="en">cybersecurity</span></h3>
+
+<p class="t">Дээрхийн сүлжээ, цахим орчинд хамаарах хэсэг. Практикт ойролцоо утгатай</p>
+</article>
+<article class="e" data-k="нууцлал confidentiality  мэдээллийг зөвхөн эрх бүхий этгээд үзэх боломжтой байх">
+<h3><span class="mn">Нууцлал</span><span class="en">confidentiality</span></h3>
+
+<p class="t">Мэдээллийг зөвхөн эрх бүхий этгээд үзэх боломжтой байх</p>
+</article>
+<article class="e" data-k="бүрэн бүтэн байдал integrity  мэдээлэл зөвшөөрөлгүй өөрчлөгдөөгүй, үнэн зөв хэвээр байх">
+<h3><span class="mn">Бүрэн бүтэн байдал</span><span class="en">integrity</span></h3>
+
+<p class="t">Мэдээлэл зөвшөөрөлгүй өөрчлөгдөөгүй, үнэн зөв хэвээр байх</p>
+</article>
+<article class="e" data-k="хүртээмж availability  систем, мэдээлэл хэрэгтэй үед ажиллагаатай байх">
+<h3><span class="mn">Хүртээмж</span><span class="en">availability</span></h3>
+
+<p class="t">Систем, мэдээлэл хэрэгтэй үед ажиллагаатай байх</p>
+</article>
+<article class="e" data-k="баталгаат байдал authenticity  мэдээлэл мэдэгдэж буй эх сурвалжаас гарсан гэдгийг батлах боломж">
+<h3><span class="mn">Баталгаат байдал</span><span class="en">authenticity</span></h3>
+
+<p class="t">Мэдээлэл мэдэгдэж буй эх сурвалжаас гарсан гэдгийг батлах боломж</p>
+</article>
+<article class="e" data-k="үгүйсгэх боломжгүй байдал non-repudiation  үйлдэл хийсэн этгээд дараа нь үгүйсгэж чадахгүй байх">
+<h3><span class="mn">Үгүйсгэх боломжгүй байдал</span><span class="en">non-repudiation</span></h3>
+
+<p class="t">Үйлдэл хийсэн этгээд дараа нь үгүйсгэж чадахгүй байх</p>
+</article>
+<article class="e" data-k="cia гурвал cia triad confidentiality, integrity, availability нууцлал, бүрэн бүтэн байдал, хүртээмж — аюулгүй байдлын гурван тулгуур">
+<h3><span class="mn">CIA гурвал</span><span class="en">CIA triad</span></h3>
+<p class="ab">Confidentiality, Integrity, Availability</p>
+<p class="t">Нууцлал, бүрэн бүтэн байдал, хүртээмж — аюулгүй байдлын гурван тулгуур</p>
+</article>
+<article class="e" data-k="аюул threat  хохирол учруулж болзошгүй гадаад буюу дотоод хүчин зүйл">
+<h3><span class="mn">Аюул</span><span class="en">threat</span></h3>
+
+<p class="t">Хохирол учруулж болзошгүй гадаад буюу дотоод хүчин зүйл</p>
+</article>
+<article class="e" data-k="эмзэг байдал vulnerability  систем, журам, хүний дадал дахь сул тал">
+<h3><span class="mn">Эмзэг байдал</span><span class="en">vulnerability</span></h3>
+
+<p class="t">Систем, журам, хүний дадал дахь сул тал</p>
+</article>
+<article class="e" data-k="эрсдэл risk  тохиолдох магадлал × учирч болох хохирлын хэмжээ">
+<h3><span class="mn">Эрсдэл</span><span class="en">risk</span></h3>
+
+<p class="t">Тохиолдох магадлал × учирч болох хохирлын хэмжээ</p>
+</article>
+<article class="e" data-k="инцидент security incident  аюулгүй байдал бодитоор зөрчигдсөн тохиолдол">
+<h3><span class="mn">Инцидент</span><span class="en">security incident</span></h3>
+
+<p class="t">Аюулгүй байдал бодитоор зөрчигдсөн тохиолдол</p>
+</article>
+<article class="e" data-k="эрсдэлийн үнэлгээ risk assessment  хөрөнгө, аюул, эмзэг байдлыг тодорхойлж эрсдэлийг хэмжих ажиллагаа">
+<h3><span class="mn">Эрсдэлийн үнэлгээ</span><span class="en">risk assessment</span></h3>
+
+<p class="t">Хөрөнгө, аюул, эмзэг байдлыг тодорхойлж эрсдэлийг хэмжих ажиллагаа</p>
+</article>
+<article class="e" data-k="аудит security audit  шаардлага хангаж буй эсэхийг хараат бус талаас шалгах">
+<h3><span class="mn">Аудит</span><span class="en">security audit</span></h3>
+
+<p class="t">Шаардлага хангаж буй эсэхийг хараат бус талаас шалгах</p>
+</article>
+<article class="e" data-k="чухал мэдээллийн дэд бүтэц cii critical information infrastructure тасалдвал улсын эдийн засаг, аюулгүй байдалд ноцтой нөлөөлөх систем">
+<h3><span class="mn">Чухал мэдээллийн дэд бүтэц</span><span class="en">CII</span></h3>
+<p class="ab">Critical Information Infrastructure</p>
+<p class="t">Тасалдвал улсын эдийн засаг, аюулгүй байдалд ноцтой нөлөөлөх систем</p>
+</article>
+<article class="e" data-k="эрсдэлийг бууруулах mitigate  хамгаалалтын арга хэмжээ авч магадлал буюу хохирлыг багасгах">
+<h3><span class="mn">Эрсдэлийг бууруулах</span><span class="en">mitigate</span></h3>
+
+<p class="t">Хамгаалалтын арга хэмжээ авч магадлал буюу хохирлыг багасгах</p>
+</article>
+<article class="e" data-k="эрсдэлийг шилжүүлэх transfer  даатгал, эсхүл гэрээгээр гуравдагч талд даалгах">
+<h3><span class="mn">Эрсдэлийг шилжүүлэх</span><span class="en">transfer</span></h3>
+
+<p class="t">Даатгал, эсхүл гэрээгээр гуравдагч талд даалгах</p>
+</article>
+<article class="e" data-k="эрсдэлийг хүлээн зөвшөөрөх accept  бага эрсдэлийг баримтжуулан хүлээн зөвшөөрөх шийдвэр">
+<h3><span class="mn">Эрсдэлийг хүлээн зөвшөөрөх</span><span class="en">accept</span></h3>
+
+<p class="t">Бага эрсдэлийг баримтжуулан хүлээн зөвшөөрөх шийдвэр</p>
+</article>
+<article class="e" data-k="эрсдэлээс зайлсхийх avoid  тухайн үйл ажиллагааг огт хийхгүй байх">
+<h3><span class="mn">Эрсдэлээс зайлсхийх</span><span class="en">avoid</span></h3>
+
+<p class="t">Тухайн үйл ажиллагааг огт хийхгүй байх</p>
+</article>
+</section><section id="haldlaga"><h2><a href="#top">Халдлагын төрөл</a><span class="n">27</span></h2>
+<article class="e" data-k="фишинг phishing  хуурамч имэйл, мессежээр нууц үг, картын мэдээлэл завших">
+<h3><span class="mn">Фишинг</span><span class="en">phishing</span></h3>
+
+<p class="t">Хуурамч имэйл, мессежээр нууц үг, картын мэдээлэл завших</p>
+</article>
+<article class="e" data-k="чиглэсэн фишинг spear phishing  тодорхой хүнийг судалж, түүнд тусгайлан бэлтгэсэн фишинг">
+<h3><span class="mn">Чиглэсэн фишинг</span><span class="en">spear phishing</span></h3>
+
+<p class="t">Тодорхой хүнийг судалж, түүнд тусгайлан бэлтгэсэн фишинг</p>
+</article>
+<article class="e" data-k="утсаар хуурах vishing voice + phishing ярианы дуудлагаар итгэл олж мэдээлэл авах">
+<h3><span class="mn">Утсаар хуурах</span><span class="en">vishing</span></h3>
+<p class="ab">voice + phishing</p>
+<p class="t">Ярианы дуудлагаар итгэл олж мэдээлэл авах</p>
+</article>
+<article class="e" data-k="мессежээр хуурах smishing sms + phishing богино мессежээр хуурамч холбоос илгээх">
+<h3><span class="mn">Мессежээр хуурах</span><span class="en">smishing</span></h3>
+<p class="ab">SMS + phishing</p>
+<p class="t">Богино мессежээр хуурамч холбоос илгээх</p>
+</article>
+<article class="e" data-k="хортой програм malware malicious software хохирол учруулах зорилготой програмын ерөнхий нэр">
+<h3><span class="mn">Хортой програм</span><span class="en">malware</span></h3>
+<p class="ab">malicious software</p>
+<p class="t">Хохирол учруулах зорилготой програмын ерөнхий нэр</p>
+</article>
+<article class="e" data-k="золиос нэхэгч програм ransomware ransom + software өгөгдлийг шифрлэн хааж, нээхийн тулд төлбөр нэхэх">
+<h3><span class="mn">Золиос нэхэгч програм</span><span class="en">ransomware</span></h3>
+<p class="ab">ransom + software</p>
+<p class="t">Өгөгдлийг шифрлэн хааж, нээхийн тулд төлбөр нэхэх</p>
+</article>
+<article class="e" data-k="трояны морь trojan  хэрэгтэй програм мэт далдалсан хортой програм">
+<h3><span class="mn">Трояны морь</span><span class="en">trojan</span></h3>
+
+<p class="t">Хэрэгтэй програм мэт далдалсан хортой програм</p>
+</article>
+<article class="e" data-k="өт worm  хүний оролцоогүйгээр сүлжээгээр өөрөө тархдаг хортой програм">
+<h3><span class="mn">Өт</span><span class="en">worm</span></h3>
+
+<p class="t">Хүний оролцоогүйгээр сүлжээгээр өөрөө тархдаг хортой програм</p>
+</article>
+<article class="e" data-k="нууц хаалга backdoor  халдагчийн үлдээсэн нууц хандалтын суваг">
+<h3><span class="mn">Нууц хаалга</span><span class="en">backdoor</span></h3>
+
+<p class="t">Халдагчийн үлдээсэн нууц хандалтын суваг</p>
+</article>
+<article class="e" data-k="ботнет botnet robot network халдагчийн удирдлагад орсон олон мянган төхөөрөмжийн сүлжээ">
+<h3><span class="mn">Ботнет</span><span class="en">botnet</span></h3>
+<p class="ab">robot network</p>
+<p class="t">Халдагчийн удирдлагад орсон олон мянган төхөөрөмжийн сүлжээ</p>
+</article>
+<article class="e" data-k="үйлчилгээ зогсоох халдлага ddos distributed denial of service олон эх үүсвэрээс ачаалал өгч системийг ажиллагаагүй болгох">
+<h3><span class="mn">Үйлчилгээ зогсоох халдлага</span><span class="en">DDoS</span></h3>
+<p class="ab">Distributed Denial of Service</p>
+<p class="t">Олон эх үүсвэрээс ачаалал өгч системийг ажиллагаагүй болгох</p>
+</article>
+<article class="e" data-k="нэг эх үүсвэрээс зогсоох dos denial of service ижил зорилготой, гэхдээ нэг эх үүсвэрээс хийгддэг хувилбар">
+<h3><span class="mn">Нэг эх үүсвэрээс зогсоох</span><span class="en">DoS</span></h3>
+<p class="ab">Denial of Service</p>
+<p class="t">Ижил зорилготой, гэхдээ нэг эх үүсвэрээс хийгддэг хувилбар</p>
+</article>
+<article class="e" data-k="асуулгын халдлага sql injection structured query language өгөгдлийн сангийн асуулгад хортой код нэмж оруулах">
+<h3><span class="mn">Асуулгын халдлага</span><span class="en">SQL injection</span></h3>
+<p class="ab">Structured Query Language</p>
+<p class="t">Өгөгдлийн сангийн асуулгад хортой код нэмж оруулах</p>
+</article>
+<article class="e" data-k="хөндлөн скрипт xss cross-site scripting вэб хуудсаар дамжуулан хэрэглэгчийн хөтөч дээр код ажиллуулах">
+<h3><span class="mn">Хөндлөн скрипт</span><span class="en">XSS</span></h3>
+<p class="ab">Cross-Site Scripting</p>
+<p class="t">Вэб хуудсаар дамжуулан хэрэглэгчийн хөтөч дээр код ажиллуулах</p>
+</article>
+<article class="e" data-k="дундаас нэвтрэх mitm man-in-the-middle хоёр талын холбоонд дундаас орж чагнах, өөрчлөх">
+<h3><span class="mn">Дундаас нэвтрэх</span><span class="en">MitM</span></h3>
+<p class="ab">Man-in-the-Middle</p>
+<p class="t">Хоёр талын холбоонд дундаас орж чагнах, өөрчлөх</p>
+</article>
+<article class="e" data-k="хүчээр таах brute force  нууц үгийг олон хувилбараар дараалан оролдох">
+<h3><span class="mn">Хүчээр таах</span><span class="en">brute force</span></h3>
+
+<p class="t">Нууц үгийг олон хувилбараар дараалан оролдох</p>
+</article>
+<article class="e" data-k="алдагдсан нууц үг турших credential stuffing  өөр сайтаас задарсан нэр, нууц үгийг энд туршиж үзэх">
+<h3><span class="mn">Алдагдсан нууц үг турших</span><span class="en">credential stuffing</span></h3>
+
+<p class="t">Өөр сайтаас задарсан нэр, нууц үгийг энд туршиж үзэх</p>
+</article>
+<article class="e" data-k="тэг өдрийн эмзэг байдал zero-day  үйлдвэрлэгч мэдээгүй, засвар нь гараагүй эмзэг байдал">
+<h3><span class="mn">Тэг өдрийн эмзэг байдал</span><span class="en">zero-day</span></h3>
+
+<p class="t">Үйлдвэрлэгч мэдээгүй, засвар нь гараагүй эмзэг байдал</p>
+</article>
+<article class="e" data-k="нийлүүлэлтийн сүлжээний халдлага supply chain attack  үйлчилгээ үзүүлэгчид халдаж, итгэлцлийн сувгаар дамжин орох">
+<h3><span class="mn">Нийлүүлэлтийн сүлжээний халдлага</span><span class="en">supply chain attack</span></h3>
+
+<p class="t">Үйлчилгээ үзүүлэгчид халдаж, итгэлцлийн сувгаар дамжин орох</p>
+</article>
+<article class="e" data-k="нийгмийн инженерчлэл social engineering  техник биш, хүнийг хуурч хандалт, мэдээлэл авах арга">
+<h3><span class="mn">Нийгмийн инженерчлэл</span><span class="en">social engineering</span></h3>
+
+<p class="t">Техник биш, хүнийг хуурч хандалт, мэдээлэл авах арга</p>
+</article>
+<article class="e" data-k="дотоод этгээдийн аюул insider threat  одоо буюу хуучин ажилтнаас үүдэх аюул">
+<h3><span class="mn">Дотоод этгээдийн аюул</span><span class="en">insider threat</span></h3>
+
+<p class="t">Одоо буюу хуучин ажилтнаас үүдэх аюул</p>
+</article>
+<article class="e" data-k="мэдээлэл алдагдалт data breach  мэдээлэл зөвшөөрөлгүй задарсан тохиолдол">
+<h3><span class="mn">Мэдээлэл алдагдалт</span><span class="en">data breach</span></h3>
+
+<p class="t">Мэдээлэл зөвшөөрөлгүй задарсан тохиолдол</p>
+</article>
+<article class="e" data-k="вэб сайт эвдэх defacement  сайтын нүүр хуудсыг өөрчилж мессеж байрлуулах">
+<h3><span class="mn">Вэб сайт эвдэх</span><span class="en">defacement</span></h3>
+
+<p class="t">Сайтын нүүр хуудсыг өөрчилж мессеж байрлуулах</p>
+</article>
+<article class="e" data-k="эрх өргөжүүлэх privilege escalation  энгийн хэрэглэгчийн эрхээс администраторын эрх рүү дэвших">
+<h3><span class="mn">Эрх өргөжүүлэх</span><span class="en">privilege escalation</span></h3>
+
+<p class="t">Энгийн хэрэглэгчийн эрхээс администраторын эрх рүү дэвших</p>
+</article>
+<article class="e" data-k="хажуу тийш тархах lateral movement  нэг систем рүү орсны дараа сүлжээ дотор бусад руу шилжих">
+<h3><span class="mn">Хажуу тийш тархах</span><span class="en">lateral movement</span></h3>
+
+<p class="t">Нэг систем рүү орсны дараа сүлжээ дотор бусад руу шилжих</p>
+</article>
+<article class="e" data-k="мэдээлэл гадагшлуулах data exfiltration  хулгайлсан мэдээллийг байгууллагаас гадагш хуулж гаргах">
+<h3><span class="mn">Мэдээлэл гадагшлуулах</span><span class="en">data exfiltration</span></h3>
+
+<p class="t">Хулгайлсан мэдээллийг байгууллагаас гадагш хуулж гаргах</p>
+</article>
+<article class="e" data-k="ул мөр устгах anti-forensics  лог, файлыг устгаж мөрдөн шалгалтыг хүндрүүлэх">
+<h3><span class="mn">Ул мөр устгах</span><span class="en">anti-forensics</span></h3>
+
+<p class="t">Лог, файлыг устгаж мөрдөн шалгалтыг хүндрүүлэх</p>
+</article>
+</section><section id="haldagch"><h2><a href="#top">Халдагч ба туршилт</a><span class="n">11</span></h2>
+<article class="e" data-k="халдагч этгээд threat actor  халдлага үйлдэж буй этгээдийн төвийг сахисан нэр">
+<h3><span class="mn">Халдагч этгээд</span><span class="en">threat actor</span></h3>
+
+<p class="t">Халдлага үйлдэж буй этгээдийн төвийг сахисан нэр</p>
+</article>
+<article class="e" data-k="улсын дэмжлэгтэй бүлэг apt advanced persistent threat нөөц ихтэй, урт хугацаанд системд далд байрладаг бүлэг">
+<h3><span class="mn">Улсын дэмжлэгтэй бүлэг</span><span class="en">APT</span></h3>
+<p class="ab">Advanced Persistent Threat</p>
+<p class="t">Нөөц ихтэй, урт хугацаанд системд далд байрладаг бүлэг</p>
+</article>
+<article class="e" data-k="хакертивист hacktivist hacker + activist үзэл санааны шалтгаанаар халддаг этгээд">
+<h3><span class="mn">Хакертивист</span><span class="en">hacktivist</span></h3>
+<p class="ab">hacker + activist</p>
+<p class="t">Үзэл санааны шалтгаанаар халддаг этгээд</p>
+</article>
+<article class="e" data-k="сонирхогч script kiddie  бэлэн хэрэгсэл татаж туршдаг туршлагагүй этгээд">
+<h3><span class="mn">Сонирхогч</span><span class="en">script kiddie</span></h3>
+
+<p class="t">Бэлэн хэрэгсэл татаж туршдаг туршлагагүй этгээд</p>
+</article>
+<article class="e" data-k="ёс зүйт хакер white hat ethical hacker зөвшөөрөлтэйгөөр эмзэг байдал хайдаг мэргэжилтэн">
+<h3><span class="mn">Ёс зүйт хакер</span><span class="en">white hat</span></h3>
+<p class="ab">ethical hacker</p>
+<p class="t">Зөвшөөрөлтэйгөөр эмзэг байдал хайдаг мэргэжилтэн</p>
+</article>
+<article class="e" data-k="хууль бус хакер black hat  зөвшөөрөлгүй, хувийн ашгийн төлөө халддаг этгээд">
+<h3><span class="mn">Хууль бус хакер</span><span class="en">black hat</span></h3>
+
+<p class="t">Зөвшөөрөлгүй, хувийн ашгийн төлөө халддаг этгээд</p>
+</article>
+<article class="e" data-k="нэвтрэлтийн шалгалт pentest penetration test зөвшөөрөлтэйгөөр халдагчийн аргаар системийг шалгах ажиллагаа">
+<h3><span class="mn">Нэвтрэлтийн шалгалт</span><span class="en">pentest</span></h3>
+<p class="ab">penetration test</p>
+<p class="t">Зөвшөөрөлтэйгөөр халдагчийн аргаар системийг шалгах ажиллагаа</p>
+</article>
+<article class="e" data-k="довтлогч баг red team  халдагчийн үүрэг гүйцэтгэж байгууллагыг сорих баг">
+<h3><span class="mn">Довтлогч баг</span><span class="en">red team</span></h3>
+
+<p class="t">Халдагчийн үүрэг гүйцэтгэж байгууллагыг сорих баг</p>
+</article>
+<article class="e" data-k="хамгаалагч баг blue team  халдлагыг илрүүлж, хариу арга хэмжээ авах баг">
+<h3><span class="mn">Хамгаалагч баг</span><span class="en">blue team</span></h3>
+
+<p class="t">Халдлагыг илрүүлж, хариу арга хэмжээ авах баг</p>
+</article>
+<article class="e" data-k="шагналт хөтөлбөр bug bounty  эмзэг байдал мэдээлсэн хүнд шагнал олгох албан ёсны хөтөлбөр">
+<h3><span class="mn">Шагналт хөтөлбөр</span><span class="en">bug bounty</span></h3>
+
+<p class="t">Эмзэг байдал мэдээлсэн хүнд шагнал олгох албан ёсны хөтөлбөр</p>
+</article>
+<article class="e" data-k="хариуцлагатай мэдээлэл responsible disclosure  эмзэг байдлыг эхлээд эзэмшигчид мэдэгдэж, засах хугацаа өгөх журам">
+<h3><span class="mn">Хариуцлагатай мэдээлэл</span><span class="en">responsible disclosure</span></h3>
+
+<p class="t">Эмзэг байдлыг эхлээд эзэмшигчид мэдэгдэж, засах хугацаа өгөх журам</p>
+</article>
+</section><section id="hamgaalalt"><h2><a href="#top">Хамгаалалтын хэрэгсэл ба байгууллага</a><span class="n">19</span></h2>
+<article class="e" data-k="хяналтын төв soc security operations center халдлагыг тасралтгүй хянаж илрүүлдэг нэгж, ихэвчлэн 24 цагийн ээлжтэй">
+<h3><span class="mn">Хяналтын төв</span><span class="en">SOC</span></h3>
+<p class="ab">Security Operations Center</p>
+<p class="t">Халдлагыг тасралтгүй хянаж илрүүлдэг нэгж, ихэвчлэн 24 цагийн ээлжтэй</p>
+</article>
+<article class="e" data-k="хариу арга хэмжээний баг cert / csirt computer emergency response team / computer security incident response team инцидентэд хариу арга хэмжээ авах баг. улс, салбар, байгууллагын түвшинд">
+<h3><span class="mn">Хариу арга хэмжээний баг</span><span class="en">CERT / CSIRT</span></h3>
+<p class="ab">Computer Emergency Response Team / Computer Security Incident Response Team</p>
+<p class="t">Инцидентэд хариу арга хэмжээ авах баг. Улс, салбар, байгууллагын түвшинд</p>
+</article>
+<article class="e" data-k="лог цуглуулах систем siem security information and event management олон системийн логийг нэг дор цуглуулж шинжилдэг платформ">
+<h3><span class="mn">Лог цуглуулах систем</span><span class="en">SIEM</span></h3>
+<p class="ab">Security Information and Event Management</p>
+<p class="t">Олон системийн логийг нэг дор цуглуулж шинжилдэг платформ</p>
+</article>
+<article class="e" data-k="халдлага илрүүлэгч ids / ips intrusion detection system / intrusion prevention system сүлжээний сэжигтэй урсгалыг илрүүлэх, таслан зогсоох систем">
+<h3><span class="mn">Халдлага илрүүлэгч</span><span class="en">IDS / IPS</span></h3>
+<p class="ab">Intrusion Detection System / Intrusion Prevention System</p>
+<p class="t">Сүлжээний сэжигтэй урсгалыг илрүүлэх, таслан зогсоох систем</p>
+</article>
+<article class="e" data-k="галт хана firewall  зөвшөөрөгдсөн сүлжээний урсгалыг шүүх төхөөрөмж буюу програм">
+<h3><span class="mn">Галт хана</span><span class="en">firewall</span></h3>
+
+<p class="t">Зөвшөөрөгдсөн сүлжээний урсгалыг шүүх төхөөрөмж буюу програм</p>
+</article>
+<article class="e" data-k="төгсгөлийн хамгаалалт edr endpoint detection and response компьютер дээрх хортой үйлдлийг илрүүлж зогсоох орчин үеийн антивирус">
+<h3><span class="mn">Төгсгөлийн хамгаалалт</span><span class="en">EDR</span></h3>
+<p class="ab">Endpoint Detection and Response</p>
+<p class="t">Компьютер дээрх хортой үйлдлийг илрүүлж зогсоох орчин үеийн антивирус</p>
+</article>
+<article class="e" data-k="мэдээлэл алдагдахаас сэргийлэх dlp data loss prevention байгууллагаас гадагш гарах мэдээллийг шүүх систем">
+<h3><span class="mn">Мэдээлэл алдагдахаас сэргийлэх</span><span class="en">DLP</span></h3>
+<p class="ab">Data Loss Prevention</p>
+<p class="t">Байгууллагаас гадагш гарах мэдээллийг шүүх систем</p>
+</article>
+<article class="e" data-k="олон хүчин зүйлийн баталгаажуулалт mfa / 2fa multi-factor authentication / two-factor authentication нууц үгээс гадна нэмэлт баталгаа (код, төхөөрөмж) шаардах">
+<h3><span class="mn">Олон хүчин зүйлийн баталгаажуулалт</span><span class="en">MFA / 2FA</span></h3>
+<p class="ab">Multi-Factor Authentication / Two-Factor Authentication</p>
+<p class="t">Нууц үгээс гадна нэмэлт баталгаа (код, төхөөрөмж) шаардах</p>
+</article>
+<article class="e" data-k="хувийн виртуал сүлжээ vpn virtual private network холболтыг шифрлэж, өөр байршлаар холбогдох технологи">
+<h3><span class="mn">Хувийн виртуал сүлжээ</span><span class="en">VPN</span></h3>
+<p class="ab">Virtual Private Network</p>
+<p class="t">Холболтыг шифрлэж, өөр байршлаар холбогдох технологи</p>
+</article>
+<article class="e" data-k="шифрлэлт encryption  мэдээллийг зөвхөн түлхүүртэй хүн уншихаар хувиргах">
+<h3><span class="mn">Шифрлэлт</span><span class="en">encryption</span></h3>
+
+<p class="t">Мэдээллийг зөвхөн түлхүүртэй хүн уншихаар хувиргах</p>
+</article>
+<article class="e" data-k="хэш утга hash  файлаас гарган авдаг тогтмол урттай хураангуй. өөрчлөгдөөгүйг батлахад ашиглана">
+<h3><span class="mn">Хэш утга</span><span class="en">hash</span></h3>
+
+<p class="t">Файлаас гарган авдаг тогтмол урттай хураангуй. Өөрчлөгдөөгүйг батлахад ашиглана</p>
+</article>
+<article class="e" data-k="шинэчлэлт, засвар patch  эмзэг байдлыг хаах зорилгоор үйлдвэрлэгчээс гаргадаг засвар">
+<h3><span class="mn">Шинэчлэлт, засвар</span><span class="en">patch</span></h3>
+
+<p class="t">Эмзэг байдлыг хаах зорилгоор үйлдвэрлэгчээс гаргадаг засвар</p>
+</article>
+<article class="e" data-k="нөөц хуулбар backup  өгөгдлийн нөөц хувь. золиос нэхэгч програмын эсрэг хамгийн үр дүнтэй хамгаалалт">
+<h3><span class="mn">Нөөц хуулбар</span><span class="en">backup</span></h3>
+
+<p class="t">Өгөгдлийн нөөц хувь. Золиос нэхэгч програмын эсрэг хамгийн үр дүнтэй хамгаалалт</p>
+</article>
+<article class="e" data-k="хамгийн бага эрх least privilege  ажилтанд зөвхөн ажилдаа шаардлагатай эрхийг олгох зарчим">
+<h3><span class="mn">Хамгийн бага эрх</span><span class="en">least privilege</span></h3>
+
+<p class="t">Ажилтанд зөвхөн ажилдаа шаардлагатай эрхийг олгох зарчим</p>
+</article>
+<article class="e" data-k="итгэлгүй архитектур zero trust  сүлжээ доторх ч гэсэн аливаа хандалтыг шалгах зарчим">
+<h3><span class="mn">Итгэлгүй архитектур</span><span class="en">zero trust</span></h3>
+
+<p class="t">Сүлжээ доторх ч гэсэн аливаа хандалтыг шалгах зарчим</p>
+</article>
+<article class="e" data-k="лог log  системийн үйл явдлын автомат бүртгэл. нотлох баримтын үндсэн эх сурвалж">
+<h3><span class="mn">Лог</span><span class="en">log</span></h3>
+
+<p class="t">Системийн үйл явдлын автомат бүртгэл. Нотлох баримтын үндсэн эх сурвалж</p>
+</article>
+<article class="e" data-k="дижитал форензик digital forensics  цахим төхөөрөмжөөс нотлох баримт олж авах шинжлэх ухааны арга">
+<h3><span class="mn">Дижитал форензик</span><span class="en">digital forensics</span></h3>
+
+<p class="t">Цахим төхөөрөмжөөс нотлох баримт олж авах шинжлэх ухааны арга</p>
+</article>
+<article class="e" data-k="инцидентийн хариу арга хэмжээ ir incident response илрүүлэх, тусгаарлах, устгах, сэргээх, дүгнэх гэсэн үе шаттай ажиллагаа">
+<h3><span class="mn">Инцидентийн хариу арга хэмжээ</span><span class="en">IR</span></h3>
+<p class="ab">Incident Response</p>
+<p class="t">Илрүүлэх, тусгаарлах, устгах, сэргээх, дүгнэх гэсэн үе шаттай ажиллагаа</p>
+</article>
+<article class="e" data-k="тасралтгүй ажиллагааны төлөвлөгөө bcp / drp business continuity plan / disaster recovery plan гамшиг, тасалдлын үед үйл ажиллагааг үргэлжлүүлэх төлөвлөгөө">
+<h3><span class="mn">Тасралтгүй ажиллагааны төлөвлөгөө</span><span class="en">BCP / DRP</span></h3>
+<p class="ab">Business Continuity Plan / Disaster Recovery Plan</p>
+<p class="t">Гамшиг, тасалдлын үед үйл ажиллагааг үргэлжлүүлэх төлөвлөгөө</p>
+</article>
+</section><section id="erhzui"><h2><a href="#top">Эрх зүйн нэр томьёо</a><span class="n">21</span></h2>
+<article class="e" data-k="харьяалал jurisdiction  аль улс мөрдөн шалгах, шүүх эрхтэй вэ гэдэг асуудал">
+<h3><span class="mn">Харьяалал</span><span class="en">jurisdiction</span></h3>
+
+<p class="t">Аль улс мөрдөн шалгах, шүүх эрхтэй вэ гэдэг асуудал</p>
+</article>
+<article class="e" data-k="нутаг дэвсгэрийн зарчим territoriality principle  үйлдэл гарсан улс харьяалалтай">
+<h3><span class="mn">Нутаг дэвсгэрийн зарчим</span><span class="en">territoriality principle</span></h3>
+
+<p class="t">Үйлдэл гарсан улс харьяалалтай</p>
+</article>
+<article class="e" data-k="үр дагаврын зарчим effects doctrine  хохирол учирсан улс харьяалалтай. кибер хэрэгт хамгийн түгээмэл">
+<h3><span class="mn">Үр дагаврын зарчим</span><span class="en">effects doctrine</span></h3>
+
+<p class="t">Хохирол учирсан улс харьяалалтай. Кибер хэрэгт хамгийн түгээмэл</p>
+</article>
+<article class="e" data-k="иргэний харьяаллын зарчим nationality principle  өөрийн иргэн гадаадад үйлдсэн хэрэгт харьяалал тогтоох">
+<h3><span class="mn">Иргэний харьяаллын зарчим</span><span class="en">nationality principle</span></h3>
+
+<p class="t">Өөрийн иргэн гадаадад үйлдсэн хэрэгт харьяалал тогтоох</p>
+</article>
+<article class="e" data-k="хоёр талын гэмт хэрэг dual criminality  хоёр улсын хуулиар гэмт хэрэг байх шаардлага">
+<h3><span class="mn">Хоёр талын гэмт хэрэг</span><span class="en">dual criminality</span></h3>
+
+<p class="t">Хоёр улсын хуулиар гэмт хэрэг байх шаардлага</p>
+</article>
+<article class="e" data-k="эрх зүйн харилцан туслалцаа mlat mutual legal assistance treaty улс хооронд нотлох баримт солилцох албан ёсны журам">
+<h3><span class="mn">Эрх зүйн харилцан туслалцаа</span><span class="en">MLAT</span></h3>
+<p class="ab">Mutual Legal Assistance Treaty</p>
+<p class="t">Улс хооронд нотлох баримт солилцох албан ёсны журам</p>
+</article>
+<article class="e" data-k="шуурхай хадгалуулах хүсэлт expedited preservation request  мэдээлэл устахаас сэргийлэх шуурхай хүсэлт. өгөх биш, хадгалуулах">
+<h3><span class="mn">Шуурхай хадгалуулах хүсэлт</span><span class="en">expedited preservation request</span></h3>
+
+<p class="t">Мэдээлэл устахаас сэргийлэх шуурхай хүсэлт. Өгөх биш, хадгалуулах</p>
+</article>
+<article class="e" data-k="шилжүүлэн өгөх extradition  сэжигтнийг нөгөө улсад шилжүүлэх ажиллагаа">
+<h3><span class="mn">Шилжүүлэн өгөх</span><span class="en">extradition</span></h3>
+
+<p class="t">Сэжигтнийг нөгөө улсад шилжүүлэх ажиллагаа</p>
+</article>
+<article class="e" data-k="пропорциональ байдал proportionality  хязгаарлалтыг үнэлэх тест: зорилго, тохиромжтой байдал, зайлшгүй байдал">
+<h3><span class="mn">Пропорциональ байдал</span><span class="en">proportionality</span></h3>
+
+<p class="t">Хязгаарлалтыг үнэлэх тест: зорилго, тохиромжтой байдал, зайлшгүй байдал</p>
+</article>
+<article class="e" data-k="хянагч data controller  мэдээллийг ямар зорилгоор боловсруулахыг шийддэг этгээд. үндсэн хариуцлагатай">
+<h3><span class="mn">Хянагч</span><span class="en">data controller</span></h3>
+
+<p class="t">Мэдээллийг ямар зорилгоор боловсруулахыг шийддэг этгээд. Үндсэн хариуцлагатай</p>
+</article>
+<article class="e" data-k="боловсруулагч data processor  хянагчийн даалгавраар боловсруулдаг этгээд">
+<h3><span class="mn">Боловсруулагч</span><span class="en">data processor</span></h3>
+
+<p class="t">Хянагчийн даалгавраар боловсруулдаг этгээд</p>
+</article>
+<article class="e" data-k="мэдээллийн эзэн data subject  хувийн мэдээлэл нь боловсруулагдаж буй хүн">
+<h3><span class="mn">Мэдээллийн эзэн</span><span class="en">data subject</span></h3>
+
+<p class="t">Хувийн мэдээлэл нь боловсруулагдаж буй хүн</p>
+</article>
+<article class="e" data-k="зөвшөөрөл consent  боловсруулах зургаан үндэслэлийн нэг. хэдийд ч буцаан татагдана">
+<h3><span class="mn">Зөвшөөрөл</span><span class="en">consent</span></h3>
+
+<p class="t">Боловсруулах зургаан үндэслэлийн нэг. Хэдийд ч буцаан татагдана</p>
+</article>
+<article class="e" data-k="хууль ёсны сонирхол legitimate interest  зөвшөөрөлгүйгээр боловсруулах уян хатан үндэслэл. тэнцвэрийн шалгуур шаардана">
+<h3><span class="mn">Хууль ёсны сонирхол</span><span class="en">legitimate interest</span></h3>
+
+<p class="t">Зөвшөөрөлгүйгээр боловсруулах уян хатан үндэслэл. Тэнцвэрийн шалгуур шаардана</p>
+</article>
+<article class="e" data-k="мартагдах эрх right to erasure  мэдээллээ устгуулах эрх. хуулийн үүргээр хадгалах ёстойд хамаарахгүй">
+<h3><span class="mn">Мартагдах эрх</span><span class="en">right to erasure</span></h3>
+
+<p class="t">Мэдээллээ устгуулах эрх. Хуулийн үүргээр хадгалах ёстойд хамаарахгүй</p>
+</article>
+<article class="e" data-k="зөрчлийн мэдэгдэл breach notification  мэдээлэл алдагдсаныг зохицуулагч, хохирогчид мэдэгдэх үүрэг">
+<h3><span class="mn">Зөрчлийн мэдэгдэл</span><span class="en">breach notification</span></h3>
+
+<p class="t">Мэдээлэл алдагдсаныг зохицуулагч, хохирогчид мэдэгдэх үүрэг</p>
+</article>
+<article class="e" data-k="зохих хянамгай байдал due diligence  байгууллага зохих арга хэмжээг авсан эсэхийг үнэлэх шалгуур">
+<h3><span class="mn">Зохих хянамгай байдал</span><span class="en">due diligence</span></h3>
+
+<p class="t">Байгууллага зохих арга хэмжээг авсан эсэхийг үнэлэх шалгуур</p>
+</article>
+<article class="e" data-k="хайхрамжгүй байдал negligence  мэдэж байж, эсхүл мэдэх ёстой байж арга хэмжээ аваагүй байдал">
+<h3><span class="mn">Хайхрамжгүй байдал</span><span class="en">negligence</span></h3>
+
+<p class="t">Мэдэж байж, эсхүл мэдэх ёстой байж арга хэмжээ аваагүй байдал</p>
+</article>
+<article class="e" data-k="нийцэл compliance  хууль, журам, стандартын шаардлагыг хангасан байдал">
+<h3><span class="mn">Нийцэл</span><span class="en">compliance</span></h3>
+
+<p class="t">Хууль, журам, стандартын шаардлагыг хангасан байдал</p>
+</article>
+<article class="e" data-k="нотлох баримтын гинжин хэлхээ chain of custody  нотлох баримтыг цуглуулснаас шүүх хүртэлх тасралтгүй бүртгэл">
+<h3><span class="mn">Нотлох баримтын гинжин хэлхээ</span><span class="en">chain of custody</span></h3>
+
+<p class="t">Нотлох баримтыг цуглуулснаас шүүх хүртэлх тасралтгүй бүртгэл</p>
+</article>
+<article class="e" data-k="хүлээн зөвшөөрөгдөх байдал admissibility  нотлох баримтыг шүүх хэрэгт ашиглаж болох эсэх">
+<h3><span class="mn">Хүлээн зөвшөөрөгдөх байдал</span><span class="en">admissibility</span></h3>
+
+<p class="t">Нотлох баримтыг шүүх хэрэгт ашиглаж болох эсэх</p>
+</article>
+</section><section id="standart"><h2><a href="#top">Стандарт, зохицуулалт, лавлах</a><span class="n">13</span></h2>
+<article class="e" data-k="iso/iec 27001 iso/iec international organization for standardization / international electrotechnical commission мэдээллийн аюулгүй байдлын удирдлагын тогтолцооны стандарт. гэрчилгээжүүлдэг">
+<h3><span class="mn">ISO/IEC 27001</span><span class="en">ISO/IEC</span></h3>
+<p class="ab">International Organization for Standardization / International Electrotechnical Commission</p>
+<p class="t">Мэдээллийн аюулгүй байдлын удирдлагын тогтолцооны стандарт. Гэрчилгээжүүлдэг</p>
+</article>
+<article class="e" data-k="iso/iec 27002   27001-ийн хяналтын арга хэмжээг дэлгэрэнгүй тайлбарласан гарын авлага">
+<h3><span class="mn">ISO/IEC 27002</span></h3>
+
+<p class="t">27001-ийн хяналтын арга хэмжээг дэлгэрэнгүй тайлбарласан гарын авлага</p>
+</article>
+<article class="e" data-k="nist csf nist csf national institute of standards and technology — cybersecurity framework ану-ын кибер аюулгүй байдлын хүрээ. гэрчилгээжүүлдэггүй, зөвхөн чиглүүлдэг">
+<h3><span class="mn">NIST CSF</span></h3>
+<p class="ab">National Institute of Standards and Technology — Cybersecurity Framework</p>
+<p class="t">АНУ-ын кибер аюулгүй байдлын хүрээ. Гэрчилгээжүүлдэггүй, зөвхөн чиглүүлдэг</p>
+</article>
+<article class="e" data-k="gdpr gdpr general data protection regulation европын хувийн мэдээлэл хамгаалах журам. улсаас гадуур ч үйлчилж болно">
+<h3><span class="mn">GDPR</span></h3>
+<p class="ab">General Data Protection Regulation</p>
+<p class="t">Европын хувийн мэдээлэл хамгаалах журам. Улсаас гадуур ч үйлчилж болно</p>
+</article>
+<article class="e" data-k="nis2 nis2 network and information security directive 2 ех-ны чухал салбарын аюулгүй байдлын директив. удирдлагын хариуцлага тогтоосон">
+<h3><span class="mn">NIS2</span></h3>
+<p class="ab">Network and Information Security Directive 2</p>
+<p class="t">ЕХ-ны чухал салбарын аюулгүй байдлын директив. Удирдлагын хариуцлага тогтоосон</p>
+</article>
+<article class="e" data-k="pci dss pci dss payment card industry data security standard төлбөрийн картын мэдээлэл боловсруулагчдад тавигдах гэрээт стандарт">
+<h3><span class="mn">PCI DSS</span></h3>
+<p class="ab">Payment Card Industry Data Security Standard</p>
+<p class="t">Төлбөрийн картын мэдээлэл боловсруулагчдад тавигдах гэрээт стандарт</p>
+</article>
+<article class="e" data-k="swift csp swift csp society for worldwide interbank financial telecommunication — customer security programme олон улсын төлбөрийн сүлжээний хэрэглэгчийн аюулгүй байдлын хөтөлбөр">
+<h3><span class="mn">SWIFT CSP</span></h3>
+<p class="ab">Society for Worldwide Interbank Financial Telecommunication — Customer Security Programme</p>
+<p class="t">Олон улсын төлбөрийн сүлжээний хэрэглэгчийн аюулгүй байдлын хөтөлбөр</p>
+</article>
+<article class="e" data-k="будапештийн конвенц budapest convention convention on cybercrime, ets no. 185 кибер гэмт хэргийн анхны олон улсын гэрээ (2001)">
+<h3><span class="mn">Будапештийн конвенц</span><span class="en">Budapest Convention</span></h3>
+<p class="ab">Convention on Cybercrime, ETS No. 185</p>
+<p class="t">Кибер гэмт хэргийн анхны олон улсын гэрээ (2001)</p>
+</article>
+<article class="e" data-k="халдлагын явцын загвар cyber kill chain  халдлагыг долоон үе шатанд задалж үздэг загвар">
+<h3><span class="mn">Халдлагын явцын загвар</span><span class="en">cyber kill chain</span></h3>
+
+<p class="t">Халдлагыг долоон үе шатанд задалж үздэг загвар</p>
+</article>
+<article class="e" data-k="халдлагын техникийн сан mitre att&amp;ck adversarial tactics, techniques and common knowledge халдагчийн бодит арга барилын нарийвчилсан лавлах сан">
+<h3><span class="mn">Халдлагын техникийн сан</span><span class="en">MITRE ATT&amp;CK</span></h3>
+<p class="ab">Adversarial Tactics, Techniques and Common Knowledge</p>
+<p class="t">Халдагчийн бодит арга барилын нарийвчилсан лавлах сан</p>
+</article>
+<article class="e" data-k="эмзэг байдлын дугаар cve common vulnerabilities and exposures тодорхойлогдсон эмзэг байдал бүрд олгогддог олон улсын дугаар">
+<h3><span class="mn">Эмзэг байдлын дугаар</span><span class="en">CVE</span></h3>
+<p class="ab">Common Vulnerabilities and Exposures</p>
+<p class="t">Тодорхойлогдсон эмзэг байдал бүрд олгогддог олон улсын дугаар</p>
+</article>
+<article class="e" data-k="эмзэг байдлын оноо cvss common vulnerability scoring system эмзэг байдлын ноцтой байдлыг 0–10 оноогоор үнэлэх систем">
+<h3><span class="mn">Эмзэг байдлын оноо</span><span class="en">CVSS</span></h3>
+<p class="ab">Common Vulnerability Scoring System</p>
+<p class="t">Эмзэг байдлын ноцтой байдлыг 0–10 оноогоор үнэлэх систем</p>
+</article>
+<article class="e" data-k="удирдлагын суваг c2 command and control халдагч алсаас команд өгдөг холбооны суваг">
+<h3><span class="mn">Удирдлагын суваг</span><span class="en">C2</span></h3>
+<p class="ab">Command and Control</p>
+<p class="t">Халдагч алсаас команд өгдөг холбооны суваг</p>
+</article>
+</section><section id="pairs"><h2><a href="#top">Амархан андуурдаг хосууд</a><span class="n">13</span></h2>
+<article class="e pair" data-k="аюул ↔ эмзэг байдал аюул бол гадны хүчин зүйл (хулгайч). эмзэг байдал бол дотоод сул тал (цоожгүй хаалга). байгууллага зөвхөн хоёр дахийг нь арилгаж чадна">
+<h3><span class="mn">Аюул ↔ Эмзэг байдал</span></h3>
+<p class="t">Аюул бол гадны хүчин зүйл (хулгайч). Эмзэг байдал бол дотоод сул тал (цоожгүй хаалга). Байгууллага зөвхөн хоёр дахийг нь арилгаж чадна</p>
+</article>
+<article class="e pair" data-k="эрсдэл ↔ инцидент эрсдэл бол болж болзошгүй байдал. инцидент бол бодитоор болсон явдал">
+<h3><span class="mn">Эрсдэл ↔ Инцидент</span></h3>
+<p class="t">Эрсдэл бол болж болзошгүй байдал. Инцидент бол бодитоор болсон явдал</p>
+</article>
+<article class="e pair" data-k="баталгаажуулалт ↔ эрх олголт эхнийх нь «чи хэн бэ», хоёр дахь нь «чи юу хийж болох вэ». нэвтэрсэн ч бүх зүйлийг үзэх эрхгүй">
+<h3><span class="mn">Баталгаажуулалт ↔ Эрх олголт</span></h3>
+<p class="t">Эхнийх нь «чи хэн бэ», хоёр дахь нь «чи юу хийж болох вэ». Нэвтэрсэн ч бүх зүйлийг үзэх эрхгүй</p>
+</article>
+<article class="e pair" data-k="хакер ↔ халдагч мэргэжлийн орчинд «хакер» нь төвийг сахисан үг. гэмт хэрэгтнийг «халдагч» гэж нэрлэх нь зөв">
+<h3><span class="mn">Хакер ↔ Халдагч</span></h3>
+<p class="t">Мэргэжлийн орчинд «хакер» нь төвийг сахисан үг. Гэмт хэрэгтнийг «халдагч» гэж нэрлэх нь зөв</p>
+</article>
+<article class="e pair" data-k="хууль ↔ стандарт хууль заавал биелүүлнэ. стандарт нь сайн дадал — хууль, гэрээ иш татсан үед л заавал болно">
+<h3><span class="mn">Хууль ↔ Стандарт</span></h3>
+<p class="t">Хууль заавал биелүүлнэ. Стандарт нь сайн дадал — хууль, гэрээ иш татсан үед л заавал болно</p>
+</article>
+<article class="e pair" data-k="хянагч ↔ боловсруулагч хянагч зорилгыг шийднэ, үндсэн хариуцлага хүлээнэ. боловсруулагч зөвхөн даалгаврыг гүйцэтгэнэ">
+<h3><span class="mn">Хянагч ↔ Боловсруулагч</span></h3>
+<p class="t">Хянагч зорилгыг шийднэ, үндсэн хариуцлага хүлээнэ. Боловсруулагч зөвхөн даалгаврыг гүйцэтгэнэ</p>
+</article>
+<article class="e pair" data-k="шифрлэлт ↔ хэш шифрлэсэн зүйлийг түлхүүрээр буцааж уншина. хэшийг буцаах боломжгүй — зөвхөн тулгаж шалгана">
+<h3><span class="mn">Шифрлэлт ↔ Хэш</span></h3>
+<p class="t">Шифрлэсэн зүйлийг түлхүүрээр буцааж уншина. Хэшийг буцаах боломжгүй — зөвхөн тулгаж шалгана</p>
+</article>
+<article class="e pair" data-k="it алба ↔ аюулгүй байдлын алба it-гийн зорилго нь систем ажиллаж байх. аюулгүй байдлын зорилго нь аюулгүй байх. хоёр нь заримдаа зөрчилддөг">
+<h3><span class="mn">IT алба ↔ Аюулгүй байдлын алба</span></h3>
+<p class="t">IT-гийн зорилго нь систем ажиллаж байх. Аюулгүй байдлын зорилго нь аюулгүй байх. Хоёр нь заримдаа зөрчилддөг</p>
+</article>
+<article class="e pair" data-k="аудит ↔ эрсдэлийн үнэлгээ аудит нь «шаардлага хангаж байна уу» гэдгийг шалгана. эрсдэлийн үнэлгээ нь «юу болж болох вэ» гэдгийг тооцоолно">
+<h3><span class="mn">Аудит ↔ Эрсдэлийн үнэлгээ</span></h3>
+<p class="t">Аудит нь «шаардлага хангаж байна уу» гэдгийг шалгана. Эрсдэлийн үнэлгээ нь «юу болж болох вэ» гэдгийг тооцоолно</p>
+</article>
+<article class="e pair" data-k="нэвтрэлтийн шалгалт ↔ сканнер сканнер автоматаар эмзэг байдал жагсаана. нэвтрэлтийн шалгалтад хүн бодитоор ашиглаж үзнэ">
+<h3><span class="mn">Нэвтрэлтийн шалгалт ↔ Сканнер</span></h3>
+<p class="t">Сканнер автоматаар эмзэг байдал жагсаана. Нэвтрэлтийн шалгалтад хүн бодитоор ашиглаж үзнэ</p>
+</article>
+<article class="e pair" data-k="мэдээлэл алдагдалт ↔ инцидент мэдээлэл алдагдалт бол инцидентийн нэг төрөл. бүх инцидент мэдээлэл алдагдуулдаггүй">
+<h3><span class="mn">Мэдээлэл алдагдалт ↔ Инцидент</span></h3>
+<p class="t">Мэдээлэл алдагдалт бол инцидентийн нэг төрөл. Бүх инцидент мэдээлэл алдагдуулдаггүй</p>
+</article>
+<article class="e pair" data-k="ransomware ↔ мэдээлэл хулгай ransomware хүртээмжийг зөрчинө. хулгай нууцлалыг зөрчинө. орчин үед хоёуланг зэрэг хийдэг болсон">
+<h3><span class="mn">Ransomware ↔ Мэдээлэл хулгай</span></h3>
+<p class="t">Ransomware хүртээмжийг зөрчинө. Хулгай нууцлалыг зөрчинө. Орчин үед хоёуланг зэрэг хийдэг болсон</p>
+</article>
+<article class="e pair" data-k="эрсдэл хүлээн зөвшөөрөх ↔ хайхрамжгүй байдал баримтжуулсан шийдвэр бол хууль ёсны. баримтгүй, зүгээр л хийгээгүй бол хайхрамжгүй байдал">
+<h3><span class="mn">Эрсдэл хүлээн зөвшөөрөх ↔ Хайхрамжгүй байдал</span></h3>
+<p class="t">Баримтжуулсан шийдвэр бол хууль ёсны. Баримтгүй, зүгээр л хийгээгүй бол хайхрамжгүй байдал</p>
+</article>
+</section><section id="say"><h2><a href="#top">Англи товчлолын дуудлага</a><span class="n">22</span></h2>
+<article class="e" data-k="cia си-ай-эй confidentiality, integrity, availability">
+<h3><span class="mn">CIA</span><span class="say">си-ай-эй</span></h3>
+<p class="ab">Confidentiality, Integrity, Availability</p>
+</article>
+<article class="e" data-k="gdpr жи-ди-пи-ар general data protection regulation">
+<h3><span class="mn">GDPR</span><span class="say">жи-ди-пи-ар</span></h3>
+<p class="ab">General Data Protection Regulation</p>
+</article>
+<article class="e" data-k="nis2 нис-хоёр network and information security directive 2">
+<h3><span class="mn">NIS2</span><span class="say">нис-хоёр</span></h3>
+<p class="ab">Network and Information Security Directive 2</p>
+</article>
+<article class="e" data-k="iso 27001 ай-эс-о хорин долоон мянга нэг international organization for standardization">
+<h3><span class="mn">ISO 27001</span><span class="say">ай-эс-о хорин долоон мянга нэг</span></h3>
+<p class="ab">International Organization for Standardization</p>
+</article>
+<article class="e" data-k="nist csf нист си-эс-эф national institute of standards and technology — cybersecurity framework">
+<h3><span class="mn">NIST CSF</span><span class="say">нист си-эс-эф</span></h3>
+<p class="ab">National Institute of Standards and Technology — Cybersecurity Framework</p>
+</article>
+<article class="e" data-k="ddos ди-дос distributed denial of service">
+<h3><span class="mn">DDoS</span><span class="say">ди-дос</span></h3>
+<p class="ab">Distributed Denial of Service</p>
+</article>
+<article class="e" data-k="soc сок security operations center">
+<h3><span class="mn">SOC</span><span class="say">сок</span></h3>
+<p class="ab">Security Operations Center</p>
+</article>
+<article class="e" data-k="siem сим security information and event management">
+<h3><span class="mn">SIEM</span><span class="say">сим</span></h3>
+<p class="ab">Security Information and Event Management</p>
+</article>
+<article class="e" data-k="cert / csirt сөрт / си-сөрт computer emergency response team / computer security incident response team">
+<h3><span class="mn">CERT / CSIRT</span><span class="say">сөрт / си-сөрт</span></h3>
+<p class="ab">Computer Emergency Response Team / Computer Security Incident Response Team</p>
+</article>
+<article class="e" data-k="mlat эм-лат mutual legal assistance treaty">
+<h3><span class="mn">MLAT</span><span class="say">эм-лат</span></h3>
+<p class="ab">Mutual Legal Assistance Treaty</p>
+</article>
+<article class="e" data-k="dlp ди-эл-пи data loss prevention">
+<h3><span class="mn">DLP</span><span class="say">ди-эл-пи</span></h3>
+<p class="ab">Data Loss Prevention</p>
+</article>
+<article class="e" data-k="mfa / 2fa эм-эф-эй / ту-эф-эй multi-factor authentication / two-factor authentication">
+<h3><span class="mn">MFA / 2FA</span><span class="say">эм-эф-эй / ту-эф-эй</span></h3>
+<p class="ab">Multi-Factor Authentication / Two-Factor Authentication</p>
+</article>
+<article class="e" data-k="apt эй-пи-ти advanced persistent threat">
+<h3><span class="mn">APT</span><span class="say">эй-пи-ти</span></h3>
+<p class="ab">Advanced Persistent Threat</p>
+</article>
+<article class="e" data-k="edr и-ди-ар endpoint detection and response">
+<h3><span class="mn">EDR</span><span class="say">и-ди-ар</span></h3>
+<p class="ab">Endpoint Detection and Response</p>
+</article>
+<article class="e" data-k="ids / ips ай-ди-эс / ай-пи-эс intrusion detection system / intrusion prevention system">
+<h3><span class="mn">IDS / IPS</span><span class="say">ай-ди-эс / ай-пи-эс</span></h3>
+<p class="ab">Intrusion Detection System / Intrusion Prevention System</p>
+</article>
+<article class="e" data-k="cve / cvss си-ви-и / си-ви-эс-эс common vulnerabilities and exposures / common vulnerability scoring system">
+<h3><span class="mn">CVE / CVSS</span><span class="say">си-ви-и / си-ви-эс-эс</span></h3>
+<p class="ab">Common Vulnerabilities and Exposures / Common Vulnerability Scoring System</p>
+</article>
+<article class="e" data-k="vpn ви-пи-эн virtual private network">
+<h3><span class="mn">VPN</span><span class="say">ви-пи-эн</span></h3>
+<p class="ab">Virtual Private Network</p>
+</article>
+<article class="e" data-k="xss экс-эс-эс cross-site scripting">
+<h3><span class="mn">XSS</span><span class="say">экс-эс-эс</span></h3>
+<p class="ab">Cross-Site Scripting</p>
+</article>
+<article class="e" data-k="sql эс-кю-эл буюу сиквел structured query language">
+<h3><span class="mn">SQL</span><span class="say">эс-кю-эл буюу сиквел</span></h3>
+<p class="ab">Structured Query Language</p>
+</article>
+<article class="e" data-k="c2 си-хоёр command and control">
+<h3><span class="mn">C2</span><span class="say">си-хоёр</span></h3>
+<p class="ab">Command and Control</p>
+</article>
+<article class="e" data-k="bcp / drp би-си-пи / ди-ар-пи business continuity plan / disaster recovery plan">
+<h3><span class="mn">BCP / DRP</span><span class="say">би-си-пи / ди-ар-пи</span></h3>
+<p class="ab">Business Continuity Plan / Disaster Recovery Plan</p>
+</article>
+<article class="e" data-k="pci dss пи-си-ай ди-эс-эс payment card industry data security standard">
+<h3><span class="mn">PCI DSS</span><span class="say">пи-си-ай ди-эс-эс</span></h3>
+<p class="ab">Payment Card Industry Data Security Standard</p>
+</article>
+</section><section id="qa"><h2><a href="#top">Оюутан асуувал</a><span class="n">10</span></h2>
+<article class="e q" data-k="хакердах нь үргэлж гэмт хэрэг үү? үгүй. зөвшөөрөлгүй нэвтэрсэн үед гэмт хэрэг. бичгээр зөвшөөрөлтэй шалгалт хууль ёсны">
+<h3><span class="mn">Хакердах нь үргэлж гэмт хэрэг үү?</span></h3>
+<p class="t">Үгүй. Зөвшөөрөлгүй нэвтэрсэн үед гэмт хэрэг. Бичгээр зөвшөөрөлтэй шалгалт хууль ёсны</p>
+</article>
+<article class="e q" data-k="vpn ашиглах хууль бус уу? монголд өөрөө хууль бус биш. түүгээр дамжуулан үйлдсэн хууль бус үйлдэлд хариуцлага хүлээнэ">
+<h3><span class="mn">VPN ашиглах хууль бус уу?</span></h3>
+<p class="t">Монголд өөрөө хууль бус биш. Түүгээр дамжуулан үйлдсэн хууль бус үйлдэлд хариуцлага хүлээнэ</p>
+</article>
+<article class="e q" data-k="интернэтэд хууль үйлчилдэг үү? тийм. асуудал нь хууль байхгүйд биш, хил дамнасан хэрэгжилтэд оршино">
+<h3><span class="mn">Интернэтэд хууль үйлчилдэг үү?</span></h3>
+<p class="t">Тийм. Асуудал нь хууль байхгүйд биш, хил дамнасан хэрэгжилтэд оршино</p>
+</article>
+<article class="e q" data-k="ransomware-д золиос төлж болох уу? эрх зүйн эрсдэлтэй. зарим улсад гэмт хэргийг санхүүжүүлэх хоригтой зөрчилдөнө">
+<h3><span class="mn">Ransomware-д золиос төлж болох уу?</span></h3>
+<p class="t">Эрх зүйн эрсдэлтэй. Зарим улсад гэмт хэргийг санхүүжүүлэх хоригтой зөрчилдөнө</p>
+</article>
+<article class="e q" data-k="iso гэрчилгээ авбал хуулийн шаардлага хангагдах уу? тодорхой үүргийн хувьд болно (аудит). бүх хуулийн үүргийг орлохгүй">
+<h3><span class="mn">ISO гэрчилгээ авбал хуулийн шаардлага хангагдах уу?</span></h3>
+<p class="t">Тодорхой үүргийн хувьд болно (аудит). Бүх хуулийн үүргийг орлохгүй</p>
+</article>
+<article class="e q" data-k="ажил олгогч имэйл уншиж болох уу? зорилго хууль ёсны, урьдчилан мэдэгдсэн, зайлшгүй хэмжээнд байвал болно">
+<h3><span class="mn">Ажил олгогч имэйл уншиж болох уу?</span></h3>
+<p class="t">Зорилго хууль ёсны, урьдчилан мэдэгдсэн, зайлшгүй хэмжээнд байвал болно</p>
+</article>
+<article class="e q" data-k="нууц үг найздаа өгвөл гэмт хэрэг үү? өөрөө биш, гэхдээ журам зөрчинө. найз нь хууль бус үйлдэл хийвэл хамтран оролцогч болох эрсдэлтэй">
+<h3><span class="mn">Нууц үг найздаа өгвөл гэмт хэрэг үү?</span></h3>
+<p class="t">Өөрөө биш, гэхдээ журам зөрчинө. Найз нь хууль бус үйлдэл хийвэл хамтран оролцогч болох эрсдэлтэй</p>
+</article>
+<article class="e q" data-k="хувийн мэдээлэл боловсруулахад зөвшөөрөл заавал хэрэгтэй юу? үгүй. зөвшөөрөл бол зургаан үндэслэлийн зөвхөн нэг нь">
+<h3><span class="mn">Хувийн мэдээлэл боловсруулахад зөвшөөрөл заавал хэрэгтэй юу?</span></h3>
+<p class="t">Үгүй. Зөвшөөрөл бол зургаан үндэслэлийн зөвхөн нэг нь</p>
+</article>
+<article class="e q" data-k="мэдээлэл алдагдвал хэдэн цагт мэдэгдэх вэ? gdpr-т 72 цаг, илрүүлснээс хойш. монголын зохицуулалтыг тусад нь үзнэ">
+<h3><span class="mn">Мэдээлэл алдагдвал хэдэн цагт мэдэгдэх вэ?</span></h3>
+<p class="t">GDPR-т 72 цаг, илрүүлснээс хойш. Монголын зохицуулалтыг тусад нь үзнэ</p>
+</article>
+<article class="e q" data-k="энэ хичээлд програмчлал хэрэгтэй юу? үгүй. техникийн ойлголтыг зөвхөн тодорхойлолтын түвшинд шаардана">
+<h3><span class="mn">Энэ хичээлд програмчлал хэрэгтэй юу?</span></h3>
+<p class="t">Үгүй. Техникийн ойлголтыг зөвхөн тодорхойлолтын түвшинд шаардана</p>
+</article>
+</section>
+<p id="empty">Тохирох нэр томьёо олдсонгүй. Товчлолыг бүтнээр нь бичиж үзээрэй — жишээ нь <b>DDoS</b> биш <b>denial</b>.</p>
+</main>
+
+<footer>
+  Хуулийн зүйл, заалтын дугаарыг энд бичээгүй. Дугаар өөрчлөгддөг тул legalinfo.mn-ээс хичээлийн өмнө шалгана.
+</footer>
+
+<script>
+(function(){
+  var q=document.getElementById('q'), clear=document.getElementById('clear'),
+      count=document.getElementById('count'), empty=document.getElementById('empty'),
+      items=[].slice.call(document.querySelectorAll('.e')),
+      secs=[].slice.call(document.querySelectorAll('section')),
+      nav=document.querySelector('nav');
+
+  function run(){
+    var v=q.value.trim().toLowerCase();
+    clear.style.display=v?'block':'none';
+    if(!v){
+      items.forEach(function(e){e.style.display=''});
+      secs.forEach(function(s){
+        s.style.display='';
+        var n=s.querySelector('h2 .n'); if(n&&n.dataset.all) n.textContent=n.dataset.all;
+      });
+      nav.style.display=''; empty.style.display='none'; count.textContent='';
+      return;
+    }
+    var parts=v.split(/\s+/), hits=0;
+    items.forEach(function(e){
+      var k=e.dataset.k, ok=parts.every(function(p){return k.indexOf(p)>-1});
+      e.style.display=ok?'':'none'; if(ok)hits++;
+    });
+    secs.forEach(function(s){
+      var vis=s.querySelectorAll('.e:not([style*="none"])').length;
+      s.style.display=vis?'':'none';
+      var n=s.querySelector('h2 .n'); if(n){ if(!n.dataset.all) n.dataset.all=n.textContent; n.textContent=vis; }
+    });
+    nav.style.display='none';
+    empty.style.display=hits?'none':'block';
+    count.textContent=hits+' илэрц';
+  }
+  function stick(){
+    var sw=document.querySelector('.searchwrap');
+    document.documentElement.style.setProperty('--stick', sw.offsetHeight+'px');
+  }
+  stick();
+  window.addEventListener('resize',stick);
+  q.addEventListener('input',function(){run();stick()});
+  if('serviceWorker' in navigator && location.protocol.indexOf('http')===0){
+    navigator.serviceWorker.register('sw.js').catch(function(){});
+  }
+  clear.addEventListener('click',function(){q.value='';run();q.focus()});
+})();
+</script>
+</body>
+</html>
